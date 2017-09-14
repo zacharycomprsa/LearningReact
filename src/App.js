@@ -16,6 +16,19 @@ const NavBar = () => (
 );
 
 class Header extends Component {
+    constructor(props) {
+        super(props);
+        let ProjectName = localStorage.getItem('ProjectName');
+        if(ProjectName == null){
+            this.state = {
+                ProjectName: "Project Name"
+            };
+        }else{
+            this.state = {
+                ProjectName: ProjectName
+            };
+        }
+    }
     render() {
         return (
             <div>
@@ -33,7 +46,7 @@ class Header extends Component {
                             </li>
                         </ul>
                     </nav>
-                    <h3 className="text-muted">Project name</h3>
+                    <h3 className="text-muted">{this.state.ProjectName}</h3>
                 </div>
             </div>
         )
@@ -41,13 +54,35 @@ class Header extends Component {
 }
 
 class JumboWithButton extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {value: ''};
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleNameSubmit = this.handleNameSubmit.bind(this);
+    }
+
+    handleNameChange(event) {
+        this.setState({value: event.target.value});
+    }
+
+    handleNameSubmit(event) {
+        window.localStorage.setItem('ProjectName', this.state.value);
+        alert('A new name has been submitted: ' + this.state.value);
+        event.preventDefault();
+    }
+
     render() {
         return (
             <div>
                 <div className="jumbotron">
                     <h1 className="display-3">{this.props.Header}</h1>
                     <p className="lead">{this.props.SubText}</p>
-                    <p><a className="btn btn-lg btn-success" href="#" role="button">{this.props.SignUpBtnText}</a></p>
+                    <form >
+                        <div className="form-group">
+                            <input placeholder="Change Project Name" className="form-control" type="text" value={this.state.value} onChange={this.handleNameChange}></input>
+                        </div>
+                        <button className="btn btn-lg btn-success" type="button" onClick={this.handleNameSubmit}>Submit Name Change</button>
+                    </form>
                 </div>
             </div>
         )
@@ -106,7 +141,7 @@ class ContactForm extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        let ContactData = JSON.parse(localStorage.getItem('ContactData'));
+    /*    let ContactData = JSON.parse(localStorage.getItem('ContactData'));*/
     }
 
 
@@ -118,7 +153,7 @@ class ContactForm extends Component {
             formData[field] = this.refs[field].value;
         }
         console.log('-->', formData);
-        window.localStorage.setItem('ContactData', JSON.stringify(formData));
+      /*  window.localStorage.setItem('ContactData', JSON.stringify(formData));*/
         alert('Contact Form Data: ' + JSON.stringify(formData));
     }
 
@@ -129,7 +164,6 @@ class ContactForm extends Component {
                     <legend>Contact Us Tomorrow!</legend>
 
                     <div className="form-group">
-                        <label className="sr-only" for="email">Email address:</label>
                         <input name="first_name" placeholder="First Name" className="form-control" type="text" ref="FirstName"></input>
                     </div>
                     <div className="form-group">
