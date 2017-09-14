@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import {BrowserRouter as Router,Route,Link} from 'react-router-dom'
-import './narrow-jumbotron.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import './narrow-jumbotron.css'
 /*import { Jumbotron, Button,Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,Container,Row,Col } from 'reactstrap'*/
 
 const NavBar = () => (
@@ -106,7 +106,9 @@ class ContactForm extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        let ContactData = JSON.parse(localStorage.getItem('ContactData'));
     }
+
 
     handleSubmit(e) {
         e.preventDefault();
@@ -116,12 +118,40 @@ class ContactForm extends Component {
             formData[field] = this.refs[field].value;
         }
         console.log('-->', formData);
+        window.localStorage.setItem('ContactData', JSON.stringify(formData));
         alert('Contact Form Data: ' + JSON.stringify(formData));
     }
 
     render() {
         return (
-            <form className="well form-horizontal" onSubmit={this.handleSubmit}>
+            <form className="form-group" onSubmit={this.handleSubmit}>
+                <fieldset>
+                    <legend>Contact Us Tomorrow!</legend>
+
+                    <div className="form-group">
+                        <label className="sr-only" for="email">Email address:</label>
+                        <input name="first_name" placeholder="First Name" className="form-control" type="text" ref="FirstName"></input>
+                    </div>
+                    <div className="form-group">
+                        <input name="last_name" placeholder="Last Name" className="form-control" type="text" ref="LastName"></input>
+                    </div>
+                    <div className="form-group">
+                        <input name="email" placeholder="Email Address" className="form-control" type="text" ref="Email"></input>
+                    </div>
+                    <div className="form-group">
+                        <input name="phone" placeholder="+27 021 456 325" className="form-control" type="text" ref="Phone"></input>
+                    </div>
+                    <div className="form-group">
+                        <textarea className="form-control" name="comment" placeholder="Message Body" ref="Message"></textarea>
+                    </div>
+                    <div className="form-group">
+                        <div className="text-center">
+                            <button type="submit" className="btn btn-success" value="Submit">Submit <span className="glyphicon glyphicon-send"></span></button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+          /*  <form className="well form-horizontal" onSubmit={this.handleSubmit}>
                 <fieldset>
                     <legend>Contact Us Tomorrow!</legend>
                     <div className="form-group">
@@ -176,7 +206,7 @@ class ContactForm extends Component {
                     </div>
 
                 </fieldset>
-            </form>
+            </form>*/
         )
     }
 }
