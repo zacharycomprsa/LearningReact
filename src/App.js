@@ -23,7 +23,7 @@ class Header extends Component {
                     <nav>
                         <ul className="nav nav-pills float-right">
                             <li className="nav-item">
-                                <a className="nav-link active" href="/">Home <span className="sr-only">(current)</span></a>
+                                <a className="nav-link" href="/">Home</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="/about">About</a>
@@ -103,13 +103,25 @@ class MarketingField extends Component {
 }
 
 class ContactForm extends Component{
-    submitContactForm() {
-        console.log('this is:', this);
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+
+        const formData = {};
+        for (const field in this.refs) {
+            formData[field] = this.refs[field].value;
+        }
+        console.log('-->', formData);
+        alert('Contact Form Data: ' + JSON.stringify(formData));
     }
     render(){
         return(
             <div className="container">
-                <form className="well form-horizontal">
+                <form className="well form-horizontal" onSubmit={this.handleSubmit}>
                     <fieldset>
                         <legend>Contact Us Tomorrow!</legend>
                         <div className="form-group">
@@ -117,7 +129,7 @@ class ContactForm extends Component{
                             <div className="col-md-4 inputGroupContainer">
                                 <div className="input-group">
                                     <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-user"></i></span>
-                                    <input name="first_name" placeholder="First Name" className="form-control" type="text"></input>
+                                    <input name="first_name" placeholder="First Name" className="form-control" type="text" ref="FirstName"></input>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +138,7 @@ class ContactForm extends Component{
                             <div className="col-md-4 inputGroupContainer">
                                 <div className="input-group">
                                     <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-user"></i></span>
-                                    <input name="last_name" placeholder="Last Name" className="form-control" type="text"></input>
+                                    <input name="last_name" placeholder="Last Name" className="form-control" type="text" ref="LastName"></input>
                                 </div>
                             </div>
                         </div>
@@ -135,7 +147,7 @@ class ContactForm extends Component{
                             <div className="col-md-4 inputGroupContainer">
                                 <div className="input-group">
                                     <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-envelope"></i></span>
-                                    <input name="email" placeholder="Email Address" className="form-control" type="text"></input>
+                                    <input name="email" placeholder="Email Address" className="form-control" type="text" ref="Email"></input>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +156,7 @@ class ContactForm extends Component{
                             <div className="col-md-4 inputGroupContainer">
                                 <div className="input-group">
                                     <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-earphone"></i></span>
-                                    <input name="phone" placeholder="+27 021 456 325" className="form-control" type="text"></input>
+                                    <input name="phone" placeholder="+27 021 456 325" className="form-control" type="text" ref="Phone"></input>
                                 </div>
                             </div>
                         </div>
@@ -153,13 +165,13 @@ class ContactForm extends Component{
                             <div className="col-md-4 inputGroupContainer">
                                 <div className="input-group">
                                     <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-pencil"></i></span>
-                                    <textarea className="form-control" name="comment" placeholder="Message Body"></textarea>
+                                    <textarea className="form-control" name="comment" placeholder="Message Body" ref="Message"></textarea>
                                 </div>
                             </div>
                         </div>
                         <div className="form-group">
                             <div className="text-center">
-                                <button type="submit" className="btn btn-success" onClick={(e) => this.submitContactForm(e)}>Submit <span className="glyphicon glyphicon-send"></span></button>
+                                <button type="submit" className="btn btn-success" value="Submit">Submit <span className="glyphicon glyphicon-send"></span></button>
                             </div>
                         </div>
 
