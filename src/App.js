@@ -3,7 +3,7 @@ import {BrowserRouter as Router,Route,Link} from 'react-router-dom'
 import './narrow-jumbotron.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { Jumbotron, Button,Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,Container,Row,Col } from 'reactstrap'
+/*import { Jumbotron, Button,Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,Container,Row,Col } from 'reactstrap'*/
 
 const NavBar = () => (
     <Router>
@@ -102,7 +102,7 @@ class MarketingField extends Component {
     }
 }
 
-class ContactForm extends Component{
+class ContactForm extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -118,66 +118,65 @@ class ContactForm extends Component{
         console.log('-->', formData);
         alert('Contact Form Data: ' + JSON.stringify(formData));
     }
-    render(){
-        return(
-            <div className="container">
-                <form className="well form-horizontal" onSubmit={this.handleSubmit}>
-                    <fieldset>
-                        <legend>Contact Us Tomorrow!</legend>
-                        <div className="form-group">
-                            <label className="col-md-4 control-label">First Name</label>
-                            <div className="col-md-4 inputGroupContainer">
-                                <div className="input-group">
-                                    <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-user"></i></span>
-                                    <input name="first_name" placeholder="First Name" className="form-control" type="text" ref="FirstName"></input>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="col-md-4 control-label">Last Name</label>
-                            <div className="col-md-4 inputGroupContainer">
-                                <div className="input-group">
-                                    <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-user"></i></span>
-                                    <input name="last_name" placeholder="Last Name" className="form-control" type="text" ref="LastName"></input>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="col-md-4 control-label">E-Mail</label>
-                            <div className="col-md-4 inputGroupContainer">
-                                <div className="input-group">
-                                    <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-envelope"></i></span>
-                                    <input name="email" placeholder="Email Address" className="form-control" type="text" ref="Email"></input>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="col-md-4 control-label">Phone</label>
-                            <div className="col-md-4 inputGroupContainer">
-                                <div className="input-group">
-                                    <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-earphone"></i></span>
-                                    <input name="phone" placeholder="+27 021 456 325" className="form-control" type="text" ref="Phone"></input>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="col-md-4 control-label">Message</label>
-                            <div className="col-md-4 inputGroupContainer">
-                                <div className="input-group">
-                                    <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-pencil"></i></span>
-                                    <textarea className="form-control" name="comment" placeholder="Message Body" ref="Message"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <div className="text-center">
-                                <button type="submit" className="btn btn-success" value="Submit">Submit <span className="glyphicon glyphicon-send"></span></button>
-                            </div>
-                        </div>
 
-                    </fieldset>
-                </form>
-            </div>
+    render() {
+        return (
+            <form className="well form-horizontal" onSubmit={this.handleSubmit}>
+                <fieldset>
+                    <legend>Contact Us Tomorrow!</legend>
+                    <div className="form-group">
+                        <label className="col-md-4 control-label">First Name</label>
+                        <div className="col-md-4 inputGroupContainer">
+                            <div className="input-group">
+                                <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="First Name" className="form-control" type="text" ref="FirstName"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-md-4 control-label">Last Name</label>
+                        <div className="col-md-4 inputGroupContainer">
+                            <div className="input-group">
+                                <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-user"></i></span>
+                                <input name="last_name" placeholder="Last Name" className="form-control" type="text" ref="LastName"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-md-4 control-label">E-Mail</label>
+                        <div className="col-md-4 inputGroupContainer">
+                            <div className="input-group">
+                                <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-envelope"></i></span>
+                                <input name="email" placeholder="Email Address" className="form-control" type="text" ref="Email"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-md-4 control-label">Phone</label>
+                        <div className="col-md-4 inputGroupContainer">
+                            <div className="input-group">
+                                <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-earphone"></i></span>
+                                <input name="phone" placeholder="+27 021 456 325" className="form-control" type="text" ref="Phone"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-md-4 control-label">Message</label>
+                        <div className="col-md-4 inputGroupContainer">
+                            <div className="input-group">
+                                <span className="input-group-addon widen-span"><i className="glyphicon glyphicon-pencil"></i></span>
+                                <textarea className="form-control" name="comment" placeholder="Message Body" ref="Message"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="text-center">
+                            <button type="submit" className="btn btn-success" value="Submit">Submit <span className="glyphicon glyphicon-send"></span></button>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
         )
     }
 }
@@ -199,7 +198,9 @@ const Home = () => (
         <body>
         <div className="container">
             <Header/>
-            <JumboWithButton  Header="Jumbotron heading" SubText="Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus." SignUpBtnText="Sign up today"/>
+            <JumboWithButton Header="Jumbotron heading"
+                             SubText="Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus."
+                             SignUpBtnText="Sign up today"/>
             <MarketingField/>
             <Footer footerText="Home"/>
         </div>
@@ -212,7 +213,7 @@ const About = () => (
         <body>
         <div className="container">
             <Header/>
-            <JumboWithButton  Header="About" SubText="Stuffs" SignUpBtnText="Don't Click"/>
+            <JumboWithButton Header="About" SubText="Stuffs" SignUpBtnText="Don't Click"/>
             <div className="row marketing">
                 <div className="col-lg-6">
                     <h4>About Some Stuff</h4>
