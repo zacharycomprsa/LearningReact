@@ -549,7 +549,7 @@ class GithubUsers extends React.Component {
               <ul id="page-numbers">{renderPageNumbers}</ul>
             </div>
           </div>
-          <Footer footerText="GithubUsers" />
+          <Footer footerText="Github Users" />
         </div>
       </div>
     );
