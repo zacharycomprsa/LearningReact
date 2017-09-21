@@ -12,11 +12,12 @@ const NavBar = () => (
       <Route exact path="/" component={Home} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
+      <Route path="/githubUsers" component={GithubUsers} />
     </div>
   </Router>
 );
 
-class AxiosGet extends Component {
+/*class AxiosGet extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -61,7 +62,7 @@ class AxiosGet extends Component {
         </div>
     );
   }
-}
+}*/
 
 class Header extends Component {
   constructor(props) {
@@ -96,6 +97,11 @@ class Header extends Component {
               <li className="nav-item">
                 <a className="nav-link" href="/contact">
                   Contact
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/GithubUsers">
+                  Github Users
                 </a>
               </li>
             </ul>
@@ -396,11 +402,7 @@ const About = () => (
     <body>
       <div className="container">
         <Header />
-        <Jumbo
-            Header="About"
-            SubText="Stuffs"
-        />
-        <AxiosGet/>
+        <Jumbo Header="About" SubText="Stuffs" />
         <div className="row marketing">
           <div className="col-lg-6">
             <h4>About Some Stuff</h4>
@@ -460,5 +462,98 @@ const Contact = () => (
     </body>
   </div>
 );
+
+class GithubUsers extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      users: [],
+      currentPage: 1,
+      usersPerPage: 5
+    };
+
+    this.getData();
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  getData() {
+    axios.get("https://api.github.com/users?since=135").then(response => {
+      this.setState({ users: response.data });
+      console.log("users", this.state.users);
+    });
+  }
+
+  handleClick(event) {
+    this.setState({
+      currentPage: Number(event.target.id)
+    });
+  }
+
+  render() {
+    const { users, currentPage, usersPerPage } = this.state;
+
+
+    const indexOfLastUsers = currentPage * usersPerPage;
+    const indexOfFirstUsers = indexOfLastUsers - usersPerPage;
+    const currentUsers = users.slice(indexOfFirstUsers, indexOfLastUsers);
+
+    const renderUsers = currentUsers.map((user, index) => {
+      return (
+        <li className="list-group-item" key={index}>
+          <img
+            src={user.avatar_url}
+            className="image-right"
+            width="60px"
+            height="40px"
+          />{" "}
+          {user.login}
+        </li>
+      );
+    });
+
+    // Logic for displaying page numbers
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(users.length / usersPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    const renderPageNumbers = pageNumbers.map(number => {
+      return (
+        <ul className="pagination">
+          <li
+            key={number}
+            id={number}
+            onClick={this.handleClick}
+            className="pager-class"
+          >
+            {number}
+          </li>
+        </ul>
+      );
+    });
+
+    return (
+      <div>
+        <div className="container">
+          <Header />
+          <div className="jumbotron">
+            <h1 className="display-3">Returning Github Users</h1>
+            <div className="panel panel-default">
+              <div className="panel-heading">Github Users</div>
+              <div className="panel-body">
+                <ul className="list-group">{renderUsers}</ul>
+              </div>
+            </div>
+            <div className="padding"></div>
+            <div className="panel-footer">
+              <ul id="page-numbers">{renderPageNumbers}</ul>
+            </div>
+          </div>
+          <Footer footerText="GithubUsers" />
+        </div>
+      </div>
+    );
+  }
+}
 
 export default NavBar;
