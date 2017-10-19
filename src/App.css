@@ -106,3 +106,7 @@
 .subText{
   font-size: 1rem;
 }*/
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}

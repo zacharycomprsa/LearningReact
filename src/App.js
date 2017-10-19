@@ -1,18 +1,22 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./narrow-jumbotron.css";
 import axios from "axios";
-/*import { Jumbotron, Button,Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,Container,Row,Col } from 'reactstrap'*/
+import SearchInput  from "react-search-input";
+import { Card, CardImg, CardText, CardBody,CardTitle, CardSubtitle, Button, Modal, ModalHeader,CardLink, ModalBody, ModalFooter,Container, Row, Col } from 'reactstrap';
+import GitHubLogin from 'react-github-login';
+
 
 const NavBar = () => (
   <Router>
     <div>
-      <Route exact path="/" component={Home} />
+      <Route exact path="/" component={Login} />
+      <Route exact path="/home" component={Home} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
-      <Route path="/githubUsers" component={GithubUsers} />
+      <Route path="/githubViewer" component={GithubViewer} />
     </div>
   </Router>
 );
@@ -79,13 +83,40 @@ class Header extends Component {
     }
   }
   render() {
+    let Login = localStorage.getItem("Type");
+    var githubViewer;
+    var signOut;
+    if (Login === "Private") {
+      githubViewer = (
+        <li className="nav-item">
+          <a className="nav-link" href="/GithubViewer">
+            Github Viewer
+          </a>
+        </li>
+      );
+      signOut = (
+        <li className="nav-item">
+          <a className="nav-link" href="/">
+            Sign Out
+          </a>
+        </li>
+      );
+    } else {
+      signOut = (
+        <li className="nav-item">
+          <a className="nav-link" href="/">
+            Sign In
+          </a>
+        </li>
+      );
+    }
     return (
       <div>
         <div className="header clearfix">
           <nav>
             <ul className="nav nav-pills float-right">
               <li className="nav-item">
-                <a className="nav-link" href="/">
+                <a className="nav-link" href="/home">
                   Home
                 </a>
               </li>
@@ -99,11 +130,8 @@ class Header extends Component {
                   Contact
                 </a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/GithubUsers">
-                  Github Users
-                </a>
-              </li>
+              {githubViewer}
+              {signOut}
             </ul>
           </nav>
           <h3 className="text-muted">{this.state.ProjectName}</h3>
@@ -380,6 +408,181 @@ class Footer extends Component {
   }
 }
 
+class Login extends React.Component {
+  constructor() {
+    super();
+    this.state={
+      modal: false
+    }
+    this.setCred();
+    /*  this.getData();*/
+    this.handleLogin = this.handleLogin.bind(this);
+    this.publicLogin = this.publicLogin.bind(this);
+    this.gitHubSignIn = this.gitHubSignIn.bind(this);
+    this.toggle = this.toggle.bind(this);
+  }
+
+
+  setCred() {
+    var creds = [
+      {
+        Email: "zachary@comprsa.com",
+        Password: "708090"
+      }
+    ];
+
+    window.localStorage.setItem("credentials", JSON.stringify(creds));
+  }
+  handleLogin(e) {
+    e.preventDefault();
+
+    const credentials = {};
+    for (const field in this.refs) {
+      credentials[field] = this.refs[field].value;
+    }
+    console.log("credentials", credentials);
+    var Email = credentials.Email;
+    var Password = credentials.Password;
+    var storedCreds = JSON.parse(window.localStorage.getItem("credentials"));
+    debugger;
+    if (Email !== "") {
+      if (Email === storedCreds[0].Email && Password === storedCreds[0].Password) {
+        localStorage.setItem("Type", "Private");
+        window.location = "http://localhost:3000/home";
+      } else alert("Incorrect Credentials");
+    } else {
+      alert("Email Field is Empty");
+    }
+  }
+
+  publicLogin(f) {
+    f.preventDefault();
+    localStorage.setItem("Type", "Public");
+    window.location = "http://localhost:3000/home";
+  }
+
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  gitHubSignIn(g) {
+    g.preventDefault();
+    this.toggle();
+  }
+ /* handleSocialLoginFailure(err){
+    console.error(err)
+  }*/
+
+
+  render() {
+    const onSuccess = response => console.log(response);
+    const onFailure = response => console.error(response);
+    return (
+      <div>
+        <body>
+          <div className="container">
+            <Jumbo
+              Header="Welcome"
+              SubText="Enter your credentials and select 'Sign In' or select 'Login With Github' to sign in via Guithub OAuth in order to browse the protected pages and lastly for public pages select 'Continue' to be directed to the publicly available pages. "
+            />
+            <div className="well well-lg">
+              <form className="form-group" onSubmit={this.handleLogin}>
+                <fieldset>
+                  <div className="text-center">
+                    <legend>Enter Credentials</legend>
+                  </div>
+                  <div className="form-group">
+                    <input
+                      name="email"
+                      placeholder="Email Address"
+                      className="form-control"
+                      type="text"
+                      ref="Email"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      name="password"
+                      placeholder="Password"
+                      className="form-control"
+                      type="password"
+                      ref="Password"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <div className="text-center">
+                      <div
+                        className="btn-group btn-group-justified"
+                        role="group"
+                        aria-label="..."
+                      >
+                        <button
+                          type="submit"
+                          className="btn btn-success btn-group"
+                          value="Submit"
+                        >
+                          Sign In <span className="glyphicon glyphicon-send" />
+                        </button>
+                        <button
+                            type="submit"
+                            className="btn btn-primary btn-group"
+                            onClick={this.publicLogin}
+                            value="Submit"
+                        >
+                          Continue <span className="glyphicon glyphicon-send" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+              <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                <ModalBody>
+                  <Card  style={{textAlignVertical: "center",textAlign: "center",}}>
+                    <CardBody>
+                      <div className="well well-lg">
+                        <form className="form-group">
+                          <fieldset>
+                            <div className="text-center">
+                              <legend>Enter Email Address</legend>
+                            </div>
+                            <div className="form-group">
+                              <input
+                                  name="email"
+                                  placeholder="Email Address"
+                                  className="form-control"
+                                  type="text"
+                                  ref="email"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <div className="text-center">
+                                <GitHubLogin clientId="b732003dbd93d714c5e3"
+                                             redirectUri="http://localhost:3000/home"
+                                             onSuccess={onSuccess}
+                                             onFailure={onFailure}/>
+                                  </div>
+                              </div>
+                          </fieldset>
+                        </form>
+                        </div>
+                    </CardBody>
+                  </Card>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="secondary" onClick={this.toggle}>Close</Button>
+                </ModalFooter>
+              </Modal>
+            </div>
+            <Footer footerText="Sign in" />
+          </div>
+        </body>
+      </div>
+    );
+  }
+}
 const Home = () => (
   <div>
     <body>
@@ -463,17 +666,23 @@ const Contact = () => (
   </div>
 );
 
-class GithubUsers extends React.Component {
+class GithubViewer extends React.Component {
   constructor() {
     super();
     this.state = {
       users: [],
       currentPage: 1,
-      usersPerPage: 5
+      usersPerPage: 5,
+      searchTxt: "",
+      modal: false,
+      selectedData: []
     };
 
-    this.getData();
+    /*  this.getData();*/
     this.handleClick = this.handleClick.bind(this);
+    this.updateSearch = this.updateSearch.bind(this);
+    this.toggle = this.toggle.bind(this);
+
   }
 
   getData() {
@@ -482,6 +691,18 @@ class GithubUsers extends React.Component {
       console.log("users", this.state.users);
     });
   }
+  updateSearch(x) {
+    this.setState({
+      searchTxt: x
+    });
+    console.log("searchTxt", this.state.searchTxt);
+    axios
+      .get("https://api.github.com/users?since=" + this.state.searchTxt)
+      .then(response => {
+        this.setState({ users: response.data });
+        console.log("users", this.state.users);
+      });
+  }
 
   handleClick(event) {
     this.setState({
@@ -489,22 +710,34 @@ class GithubUsers extends React.Component {
     });
   }
 
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  OpenUserDetails(user) {
+    console.log('user', user);
+    this.setState({ selectedData: user });
+    this.toggle();
+  }
+
+
   render() {
     const { users, currentPage, usersPerPage } = this.state;
-
-
     const indexOfLastUsers = currentPage * usersPerPage;
     const indexOfFirstUsers = indexOfLastUsers - usersPerPage;
     const currentUsers = users.slice(indexOfFirstUsers, indexOfLastUsers);
 
     const renderUsers = currentUsers.map((user, index) => {
       return (
-        <li className="list-group-item" key={index}>
+        <li className="list-group-item" key={index} onClick={this.OpenUserDetails.bind(this, user)}>
           <img
             src={user.avatar_url}
             className="image-right"
             width="60px"
             height="40px"
+            alt="profile_image"
           />{" "}
           {user.login}
         </li>
@@ -534,26 +767,56 @@ class GithubUsers extends React.Component {
 
     return (
       <div>
-        <div className="container">
-          <Header />
-          <div className="jumbotron">
-            <h1 className="display-3">Returning Github Users</h1>
-            <div className="panel panel-default">
-              <div className="panel-heading">Github Users</div>
-              <div className="panel-body">
-                <ul className="list-group">{renderUsers}</ul>
+        <body>
+          <div className="container">
+            <Header />
+            <div className="jumbotron">
+              <h1 className="display-3">Return Github Users</h1>
+              <div className="panel panel-default">
+                <div className="padding" />
+                <div className="panel-heading">
+                  Type To Return Users EG: 135
+                </div>
+                <SearchInput
+                  className="search-input"
+                  value={this.state.searchTxt}
+                  onChange={this.updateSearch}
+                />
+                <div className="padding" />
+                <div className="panel-heading">Github Users</div>
+                <div className="panel-body">
+                  <ul className="list-group">{renderUsers}</ul>
+                </div>
+              </div>
+              <div className="padding" />
+              <div className="panel-footer">
+                <ul id="page-numbers">{renderPageNumbers}</ul>
               </div>
             </div>
-            <div className="padding"></div>
-            <div className="panel-footer">
-              <ul id="page-numbers">{renderPageNumbers}</ul>
-            </div>
+            <Footer footerText="Github Viewer" />
           </div>
-          <Footer footerText="Github Users" />
-        </div>
+          <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+            <ModalBody>
+              <Card  style={{textAlignVertical: "center",textAlign: "center",}}>
+                <CardImg top width="100%" height="180px" src={this.state.selectedData.avatar_url} alt="Card image cap" style={{textAlignVertical: "center",textAlign: "center",}}/>
+                <CardBody>
+                  <CardTitle>{this.state.selectedData.login}</CardTitle>
+                  <CardSubtitle></CardSubtitle>
+                  <CardText> ID: {this.state.selectedData.id}</CardText>
+                  <CardText> User Type: {this.state.selectedData.type}</CardText>
+                  <CardLink href={this.state.selectedData.html_url}>Github Profile</CardLink>
+                </CardBody>
+              </Card>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={this.toggle}>Close</Button>
+            </ModalFooter>
+          </Modal>
+        </body>
       </div>
     );
   }
 }
+
 
 export default NavBar;
